@@ -42,6 +42,7 @@ app.post("/api/recommendBooks", async (req, res) => {
       ],
       max_tokens: 800,
       temperature: 0.7,
+      top_p: 0.9
     });
 
     const content = resp.choices[0].message.content;
