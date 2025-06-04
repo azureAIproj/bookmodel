@@ -41,7 +41,7 @@ function Recommend() {
   const [error, setError] = useState<string>('');
 
  
-  const emotionList = emotionParam.split(',').filter((e) => e.trim());
+  const emotionList = emotionParam.split('.').filter((e) => e.trim());
 
   // 초보 독서가 → keywords → 카테고리 추출
   const uniqueCategories = Array.from(
