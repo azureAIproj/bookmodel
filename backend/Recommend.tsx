@@ -143,9 +143,8 @@ function Recommend() {
       {/* 애독가: 감정 텍스트 기반 설명 */}
       {!summary && (
         <>
-        {emotionList.length === 0 ? (//입력이 없을 시 입력이 없어 추천할 수 없다는 문구구
-          <p>입력이 없어 추천할 수 있는 책이 없습니다.</p>
-        ) : (
+        {emotionList.length > 0 ? (//입력이 없을 시 입력이 없어 추천할 수 없다는 문구
+          (
           <ul style={{ marginTop: '1rem' }}>
             {emotionList.map((emotion) => (
               <li key={emotion} style={{ marginBottom: '0.5rem' }}>
@@ -154,7 +153,12 @@ function Recommend() {
               </li>
             ))}
           </ul>
-        )}
+        )
+        ) : (
+        keywords.length ===0 && (
+        <p>입력이 없어 추천할 수 있는 책이 없습니다.</p>
+      )
+    )}
       </>
   )}
       {/* 추천 도서 출력 */}
