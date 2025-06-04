@@ -40,6 +40,7 @@ function Recommend() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
+ 
   const emotionList = emotionParam.split(',').filter((e) => e.trim());
 
   // 초보 독서가 → keywords → 카테고리 추출
@@ -57,12 +58,13 @@ function Recommend() {
       setLoading(true);
       setError('');
       setBooks([]);
+    
 
       let prompt = '';
       if(keywords.length > 0) {
         prompt = `사용자의 감정 키워드: ${keywords.join(', ')}\n추천 도서 목록을 생성해주세요.`;
-      //}//else if (emotionParam) {
-        //prompt = `사용자의 감정 문장: ${emotionParam}\n추천 도서 목록을 생성해주세요.`;
+      }else if (emotionParam) {
+        prompt = `사용자의 감정 문장: ${emotionParam}\n추천 도서 목록을 생성해주세요.`;
       }else{
         setError('추천할 도서가 없습니다. 감정 키워드나 문장을 입력해주세요.');
         setLoading(false);
@@ -75,7 +77,6 @@ function Recommend() {
          setLoading(false);
          return;
       }
-
 
       try {
         // fetch URL은 다시 상대 경로 '/api/recommendBooks' 로!!
@@ -140,16 +141,22 @@ function Recommend() {
       )}
 
       {/* 애독가: 감정 텍스트 기반 설명 */}
-      {!summary && emotionList.length > 0 && (
-        <ul style={{ marginTop: '1rem' }}>
-          {emotionList.map((emotion) => (
-            <li key={emotion} style={{ marginBottom: '0.5rem' }}>
-              <strong>{emotion}</strong>: {emotionDescriptions[emotion] || '설명이 준비되지 않았어요.'}
-            </li>
-          ))}
-        </ul>
-      )}
-
+      {!summary && (
+        <>
+        {emotionList.length === 0 ? (//입력이 없을 시 입력이 없어 추천할 수 없다는 문구구
+          <p>입력이 없어 추천할 수 있는 책이 없습니다.</p>
+        ) : (
+          <ul style={{ marginTop: '1rem' }}>
+            {emotionList.map((emotion) => (
+              <li key={emotion} style={{ marginBottom: '0.5rem' }}>
+                <strong>{emotion}</strong> {emotionDescriptions[emotion] || ''}
+                {/*emotionalDescriptions에서 해당 감정에 대한 설명을 가져와서 출력, 그러나 일기는 키값과 완전히 같을 가능성이 낮으므로 뒤에 설명이 없더라도 공백으로 나오게 설정*/}
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+  )}
       {/* 추천 도서 출력 */}
       <div style={{ marginTop: '2rem' }}>
         <h3>📖 추천 도서 목록</h3>
